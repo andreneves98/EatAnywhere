@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">EatAnywhere</string>
+    <string name="nav_home_title">Home</string>
+    <string name="nav_favorites_title">Favorites</string>
+    <string name="nav_profile_title">Profile</string>
+    <string name="near_your_location">Near your location</string>
+    <string name="filter_button_text">Filter</string>
+    <string name="map_button_text">Map</string>
+
+    <string name="thumb">Thumb</string>
+    <string name="restaurant_title">Title</string>
+    <string name="price_category">Price/Category</string>
+    <string name="Rating">Score</string>
+</resources>
