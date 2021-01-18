@@ -11,4 +11,14 @@
     <string name="restaurant_title">Title</string>
     <string name="price_category">Price/Category</string>
     <string name="Rating">Score</string>
+    <string name="reviews_count">Reviews count</string>
+    <string name="location">Location</string>
+    <string name="informations">Informations</string>
+    <string name="schedule">Schedule</string>
+    <string name="phone_numbers">Phone Numbers</string>
+    <string name="reviews">Reviews</string>
+    <string name="review_date">Review Date</string>
+    <string name="rating_text">Rating Text</string>
+    <string name="review_text">Review Text</string>
+    <string name="visit">Visit</string>
 </resources>

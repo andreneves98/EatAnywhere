@@ -10,20 +10,23 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eatanywhere.R;
+import com.example.eatanywhere.RecyclerViewClickInterface;
 import com.example.eatanywhere.model.restaurants.Restaurant_;
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomViewHolder> {
+public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.CustomViewHolder> {
 
     private List<Restaurant_> restaurantsList;
     private Context context;
+    private RecyclerViewClickInterface recyclerViewClickInterface;
 
-    public CustomAdapter(Context context,List<Restaurant_> restaurantsList){
+    public HomeAdapter(Context context, List<Restaurant_> restaurantsList, RecyclerViewClickInterface recyclerViewClickInterface) {
         this.context = context;
         this.restaurantsList = restaurantsList;
+        this.recyclerViewClickInterface = recyclerViewClickInterface;
     }
 
     class CustomViewHolder extends RecyclerView.ViewHolder {
@@ -43,8 +46,16 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomView
             restaurantTitle = mView.findViewById(R.id.Restaurant_title);
             price_category = mView.findViewById(R.id.PriceCategory);
             rating = mView.findViewById(R.id.Rating);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    recyclerViewClickInterface.onItemClick(getAdapterPosition());
+                }
+            });
         }
     }
+
 
     @Override
     public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

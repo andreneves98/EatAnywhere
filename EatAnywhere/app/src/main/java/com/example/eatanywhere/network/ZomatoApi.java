@@ -3,6 +3,7 @@ package com.example.eatanywhere.network;
 import com.example.eatanywhere.model.locations.ApiResponseLocation;
 import com.example.eatanywhere.model.restaurants.Location;
 import com.example.eatanywhere.model.restaurants.ApiResponse;
+import com.example.eatanywhere.model.reviews.Reviews;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -18,4 +19,7 @@ public interface ZomatoApi {
     @GET("search")
     Call<ApiResponse> getNearbyRestaurants(@Query("entity_id") int entityId, @Query("entity_type") String entityType,
                                            @Query("count") int count, @Query("radius") double radius, @Header("user-key") String apiKey);
+
+    @GET("reviews")
+    Call<Reviews> getRestaurantReviews(@Query("res_id") int resId, @Header("user-key") String apiKey);
 }

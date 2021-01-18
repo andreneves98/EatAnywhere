@@ -3,7 +3,9 @@ package com.example.eatanywhere.model.restaurants;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class UserRating {
+import java.io.Serializable;
+
+public class UserRating implements Serializable {
 
     @SerializedName("aggregate_rating")
     @Expose

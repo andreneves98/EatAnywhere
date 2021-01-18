@@ -1,12 +1,14 @@
 package com.example.eatanywhere.fragments;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,14 +16,20 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.eatanywhere.R;
-import com.example.eatanywhere.adapter.CustomAdapter;
+import com.example.eatanywhere.RecyclerViewClickInterface;
+import com.example.eatanywhere.activities.RestaurantDetailsActivity;
+import com.example.eatanywhere.adapter.HomeAdapter;
 import com.example.eatanywhere.model.locations.ApiResponseLocation;
 import com.example.eatanywhere.model.locations.LocationSuggestion;
 import com.example.eatanywhere.model.restaurants.ApiResponse;
 import com.example.eatanywhere.model.restaurants.Restaurant;
 import com.example.eatanywhere.model.restaurants.Restaurant_;
+import com.example.eatanywhere.model.reviews.Review;
+import com.example.eatanywhere.model.reviews.Reviews;
+import com.example.eatanywhere.model.reviews.UserReview;
 import com.example.eatanywhere.network.RetrofitClientInstance;
 import com.example.eatanywhere.network.ZomatoApi;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,14 +43,14 @@ import retrofit2.Response;
  * Use the {@link HomeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements RecyclerViewClickInterface {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private CustomAdapter adapter;
+    private HomeAdapter adapter;
     private RecyclerView recyclerView;
 
     ProgressDialog progressDialog;
@@ -54,6 +62,7 @@ public class HomeFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private ZomatoApi service;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -90,7 +99,7 @@ public class HomeFragment extends Fragment {
         progressDialog.show();
 
         /*Create handle for the RetrofitInstance interface*/
-        final ZomatoApi service = RetrofitClientInstance.getRetrofitInstance().create(ZomatoApi.class);
+        service = RetrofitClientInstance.getRetrofitInstance().create(ZomatoApi.class);
         restaurantsList = new ArrayList<>();
 
         service.getLocation("Porto", apiKey)
@@ -169,9 +178,45 @@ public class HomeFragment extends Fragment {
     /*Method to generate List of data using RecyclerView with custom adapter*/
     private void generateDataList(List<Restaurant_> restaurantList) {
         recyclerView = getActivity().findViewById(R.id.homeRecyclerView);
-        adapter = new CustomAdapter(getActivity(),restaurantList);
+        adapter = new HomeAdapter(getActivity(),restaurantList, this);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onItemClick(final int position) {
+        Toast.makeText(getActivity(), restaurantsList.get(position).getName(), Toast.LENGTH_SHORT).show();
+
+        service.getRestaurantReviews(Integer.parseInt(restaurantsList.get(position).getId()), apiKey)
+                .enqueue(new Callback<Reviews>() {
+                    @Override
+                    public void onResponse(Call<Reviews> call, Response<Reviews> response) {
+                        List<UserReview> userReviews = response.body().getUserReviews();
+                        Log.d("DEBUG", ""+userReviews.size());
+                        Log.d("DEBUG", response.body().toString());
+
+                        ArrayList<Review> restaurantReviews = new ArrayList<>();
+                        for(int i = 0; i < userReviews.size(); i++) {
+                            restaurantReviews.add(userReviews.get(i).getReview());
+                        }
+
+                        Intent restaurantIntent = new Intent(getActivity(), RestaurantDetailsActivity.class);
+                        restaurantIntent.putExtra("restaurant", restaurantsList.get(position));
+
+                        Gson gson = new Gson();
+                        String jsonReviews = gson.toJson(restaurantReviews);
+
+                        restaurantIntent.putExtra("reviews", jsonReviews);
+                        startActivity(restaurantIntent);
+                    }
+
+                    @Override
+                    public void onFailure(Call<Reviews> call, Throwable t) {
+                        Toast.makeText(getActivity(), "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
     }
 }

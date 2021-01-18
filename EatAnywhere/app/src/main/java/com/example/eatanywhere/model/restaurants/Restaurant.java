@@ -1,9 +1,13 @@
 package com.example.eatanywhere.model.restaurants;
 
+import android.media.MediaRouter;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Restaurant {
+import java.io.Serializable;
+
+public class Restaurant implements Serializable {
 
     @SerializedName("restaurant")
     @Expose

@@ -1,8 +1,9 @@
 package com.example.eatanywhere.model.restaurants;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class ApiResponse {
+public class ApiResponse implements Serializable {
     private String results_found;
     private String results_start;
     private String results_shown;

@@ -3,9 +3,10 @@ package com.example.eatanywhere.model.restaurants;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Restaurant_ {
+public class Restaurant_ implements Serializable {
     @SerializedName("id")
     @Expose
     private String id;

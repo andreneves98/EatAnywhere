@@ -1,4 +1,4 @@
-package com.example.eatanywhere;
+package com.example.eatanywhere.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.example.eatanywhere.R;
 import com.example.eatanywhere.fragments.FavoritesFragment;
 import com.example.eatanywhere.fragments.HomeFragment;
 import com.example.eatanywhere.fragments.ProfileFragment;
