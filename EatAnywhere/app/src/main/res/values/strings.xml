@@ -20,5 +20,6 @@
     <string name="review_date">Review Date</string>
     <string name="rating_text">Rating Text</string>
     <string name="review_text">Review Text</string>
+    <string name="review_text_null">Review is empty.</string>
     <string name="visit">Visit</string>
 </resources>

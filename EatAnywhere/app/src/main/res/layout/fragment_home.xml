@@ -7,9 +7,10 @@
     tools:context=".fragments.HomeFragment">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/near_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:text="@string/near_your_location"
         android:textColor="@color/colorPrimary"
         android:textSize="24sp"
@@ -18,31 +19,39 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.01" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
-        android:id="@+id/button3"
-        android:layout_width="155dp"
-        android:layout_height="44dp"
+        android:id="@+id/filter_button"
+        android:layout_width="98dp"
+        android:layout_height="40dp"
+        android:background="@drawable/rounded_corner"
         android:text="@string/filter_button_text"
+        android:textColor="@android:color/black"
+        app:drawableStartCompat="@drawable/ic_baseline_tune_24"
+        app:drawableTint="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.195"
+        app:layout_constraintHorizontal_bias="0.3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.096" />
+        app:layout_constraintVertical_bias="0.095" />
 
     <Button
-        android:id="@+id/button4"
-        android:layout_width="155dp"
-        android:layout_height="44dp"
+        android:id="@+id/map_button"
+        android:layout_width="98dp"
+        android:layout_height="40dp"
+        android:background="@drawable/rounded_corner"
         android:text="@string/map_button_text"
+        android:textColor="@android:color/black"
+        app:drawableEndCompat="@drawable/ic_baseline_map_24"
+        app:drawableTint="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintHorizontal_bias="0.7"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.096" />
+        app:layout_constraintVertical_bias="0.095" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/homeRecyclerView"
@@ -52,6 +61,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button4" />
+        app:layout_constraintTop_toBottomOf="@+id/map_button"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

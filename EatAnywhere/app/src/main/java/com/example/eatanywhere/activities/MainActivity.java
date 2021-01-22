@@ -25,11 +25,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Intent loginIntent = new Intent(this, LoginActivity.class);
-        startActivityForResult(loginIntent, LOGIN_REQUEST);
+        //startActivityForResult(loginIntent, LOGIN_REQUEST);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getSupportActionBar().hide();   // hide app bar
+        //getSupportActionBar().hide();   // hide app bar
 
         BottomNavigationView bottomNav = findViewById(R.id.bottomNavigationView);
         bottomNav.setOnNavigationItemSelectedListener(navListener);

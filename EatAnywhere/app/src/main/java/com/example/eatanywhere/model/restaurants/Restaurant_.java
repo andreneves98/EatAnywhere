@@ -40,8 +40,13 @@ public class Restaurant_ implements Serializable {
     @SerializedName("establishment")
     @Expose
     private List<String> establishment;
+    @SerializedName("all_reviews_count")
+    @Expose
+    private int all_reviews_count;
 
-    public Restaurant_(String id, String name, Location location, String cuisines, String timings, int avgCostTwo, int priceRange, String featuredImage, UserRating userRating, String phoneNumbers, List<String> establishment) {
+    public Restaurant_(String id, String name, Location location, String cuisines, String timings,
+                       int avgCostTwo, int priceRange, String featuredImage, UserRating userRating,
+                       String phoneNumbers, List<String> establishment, int all_reviews_count) {
         this.id = id;
         this.name = name;
         this.location = location;
@@ -53,6 +58,7 @@ public class Restaurant_ implements Serializable {
         this.userRating = userRating;
         this.phoneNumbers = phoneNumbers;
         this.establishment = establishment;
+        this.all_reviews_count = all_reviews_count;
     }
 
     public String getId() {
@@ -131,6 +137,14 @@ public class Restaurant_ implements Serializable {
         this.establishment = establishment;
     }
 
+    public int getAll_reviews_count() {
+        return all_reviews_count;
+    }
+
+    public void setAll_reviews_count(int all_reviews_count) {
+        this.all_reviews_count = all_reviews_count;
+    }
+
     @Override
     public String toString() {
         return "Restaurant_{" +
@@ -145,6 +159,7 @@ public class Restaurant_ implements Serializable {
                 ", userRating=" + userRating +
                 ", phoneNumbers='" + phoneNumbers + '\'' +
                 ", establishment='" + establishment + '\'' +
+                ", all_reviews_count='" + all_reviews_count + '\'' +
                 '}';
     }
 }

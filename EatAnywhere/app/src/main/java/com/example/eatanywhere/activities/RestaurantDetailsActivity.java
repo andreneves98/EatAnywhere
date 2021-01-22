@@ -2,8 +2,12 @@ package com.example.eatanywhere.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.loader.content.AsyncTaskLoader;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eatanywhere.R;
+import com.example.eatanywhere.adapter.HomeAdapter;
+import com.example.eatanywhere.adapter.ReviewsAdapter;
 import com.example.eatanywhere.model.restaurants.Restaurant_;
 import com.example.eatanywhere.model.reviews.Review;
 import com.google.gson.Gson;
@@ -24,12 +28,15 @@ import java.lang.reflect.Type;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class RestaurantDetailsActivity extends AppCompatActivity {
 
     Intent intent;
     Restaurant_ restaurant;
     List<Review> reviews;
+    RecyclerView recyclerView;
+    ReviewsAdapter adapter;
 
     ImageView thumb;
     TextView restaurantName;
@@ -64,19 +71,24 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
         Type type = new TypeToken<List<Review>>(){}.getType();
         reviews = gson.fromJson(reviewListAsString, type);
 
-        generatePage(restaurant);
+        generatePage(restaurant, reviews);
     }
 
-    private void generatePage(Restaurant_ restaurant){
+    private void generatePage(Restaurant_ restaurant, List<Review> reviewsList){
         Picasso.with(this).load(restaurant.getFeaturedImage()).into(thumb);
+
         restaurantName.setText(restaurant.getName());
+
         rating.setText(restaurant.getUserRating().getAggregateRating());
         String ratingColor = "#" + restaurant.getUserRating().getRatingColor();
         rating.setTextColor(Color.parseColor(ratingColor));
-        // reviewsCount.setText(restaurant.); falta fazer a query para as reviews...
+
+        String reviewsCountString = String.format(Locale.getDefault(), "%d reviews", restaurant.getAll_reviews_count());
+        reviewsCount.setText(reviewsCountString);
 
         String price_category = processPriceCategory(restaurant.getPriceRange(), restaurant.getCuisines());
         priceCategory.setText(price_category);
+
         location.setText(restaurant.getLocation().getAddress());
         //schedule.setText(restaurant.getTimings());
 
@@ -90,22 +102,28 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
 
         phoneNumbers.setText(phone_numbers);
 
+        recyclerView = findViewById(R.id.reviewsList);
+        adapter = new ReviewsAdapter(this, reviewsList);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
+
     }
 
     private String processPriceCategory(int price_range, String cuisines) {
         String price_category = "";
         switch(price_range) {
             case 2:
-                price_category = "€";
+                price_category = "[€]";
                 break;
             case 3:
-                price_category = "€€";
+                price_category = "[€€]";
                 break;
             case 4:
-                price_category = "€€€";
+                price_category = "[€€€]";
                 break;
         }
-        price_category += " | " + cuisines;
+        price_category += " " + cuisines;
 
         return price_category;
     }

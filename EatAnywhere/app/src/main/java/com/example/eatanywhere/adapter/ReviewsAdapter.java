@@ -2,6 +2,7 @@ package com.example.eatanywhere.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,17 +27,17 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.CustomVi
 
     private List<Review> reviewsList;
     private Context context;
-    private RecyclerViewClickInterface recyclerViewClickInterface;
+    //private RecyclerViewClickInterface recyclerViewClickInterface;
 
-    public ReviewsAdapter(Context context, List<Review> reviewsList, RecyclerViewClickInterface recyclerViewClickInterface) {
+    public ReviewsAdapter(Context context, List<Review> reviewsList) {
         this.context = context;
         this.reviewsList = reviewsList;
-        this.recyclerViewClickInterface = recyclerViewClickInterface;
+        //this.recyclerViewClickInterface = recyclerViewClickInterface;
     }
 
     class CustomViewHolder extends RecyclerView.ViewHolder {
 
-        public final View mView;
+        public View mView;
         private ImageView profilePic;
         TextView userRating;
         TextView reviewDate;
@@ -48,13 +49,13 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.CustomVi
         CustomViewHolder(View itemView) {
             super(itemView);
             mView = itemView;
-
             profilePic = mView.findViewById(R.id.profilePic);
             userRating = mView.findViewById(R.id.user_rating);
             reviewDate = mView.findViewById(R.id.review_date);
             ratingText = mView.findViewById(R.id.rating_text);
             reviewText = mView.findViewById(R.id.review_text);
             visit = mView.findViewById(R.id.visit);
+
 
             /*itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -76,8 +77,9 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.CustomVi
     @Override
     public void onBindViewHolder(CustomViewHolder holder, int position) {
         //holder.profilePic.setImageDrawable(reviewsList.get(position).getUser().getProfileImage());
-
-        holder.userRating.setText(reviewsList.get(position).getRating());
+        Log.d("DEBUG:", String.valueOf(reviewsList.get(position).getRating()));
+        holder.userRating.setText(String.valueOf(reviewsList.get(position).getRating()));
+        holder.userRating.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_baseline_star_24, 0);
 
         String ratingColor = "#";
         ratingColor += reviewsList.get(position).getRatingColor();
@@ -87,16 +89,22 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.CustomVi
         holder.reviewDate.setText(reviewsList.get(position).timestampToDate(timestamp));
 
         holder.ratingText.setText(reviewsList.get(position).getRatingText());
-        holder.reviewText.setText(reviewsList.get(position).getReviewText());
+
+        if (!reviewsList.get(position).getReviewText().equals("")) {
+            holder.reviewText.setText(reviewsList.get(position).getReviewText());
+        } else {
+            holder.reviewText.setText(R.string.review_text_null);
+        }
+
         holder.visit.setText(reviewsList.get(position).getReviewTimeFriendly());
 
 
-        /*Picasso.Builder builder = new Picasso.Builder(context);
+        Picasso.Builder builder = new Picasso.Builder(context);
         builder.downloader(new OkHttp3Downloader(context));
-        builder.build().load(restaurantsList.get(position).getFeaturedImage())
-                .placeholder((R.drawable.ic_launcher_background))
+        builder.build().load(reviewsList.get(position).getUser().getProfileImage())
+                .placeholder((R.drawable.img))
                 .error(R.drawable.ic_launcher_background)
-                .into(holder.thumb);*/
+                .into(holder.profilePic);
 
     }
 

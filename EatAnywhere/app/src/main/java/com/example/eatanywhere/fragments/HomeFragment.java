@@ -93,7 +93,7 @@ public class HomeFragment extends Fragment implements RecyclerViewClickInterface
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
+        getActivity().setTitle(R.string.app_name);
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage("Loading....");
         progressDialog.show();
@@ -138,7 +138,7 @@ public class HomeFragment extends Fragment implements RecyclerViewClickInterface
                                             //Log.d("DEBUG", "Item: [" + restaurants.get(i).getRestaurant().getId() + ", " + restaurants.get(i).getRestaurant().getName() + ", " + restaurants.get(i).getRestaurant().getLocation().getLocalityVerbose() + "]");
                                             restaurantsList.add(new Restaurant_(rest.getId(),rest.getName(),rest.getLocation(), rest.getCuisines(), rest.getTimings(), rest.getAvgCostTwo(),
                                                                                 rest.getPriceRange(), rest.getFeaturedImage(), rest.getUserRating(), rest.getPhoneNumbers(),
-                                                                                rest.getEstablishment()));
+                                                                                rest.getEstablishment(), rest.getAll_reviews_count()));
                                             //mAdapter.notifyItemInserted(i);
                                         }
                                         generateDataList(restaurantsList);
@@ -178,7 +178,7 @@ public class HomeFragment extends Fragment implements RecyclerViewClickInterface
     /*Method to generate List of data using RecyclerView with custom adapter*/
     private void generateDataList(List<Restaurant_> restaurantList) {
         recyclerView = getActivity().findViewById(R.id.homeRecyclerView);
-        adapter = new HomeAdapter(getActivity(),restaurantList, this);
+        adapter = new HomeAdapter(getActivity(), restaurantList, this);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
