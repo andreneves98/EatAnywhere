@@ -3,12 +3,16 @@ package com.example.eatanywhere.fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.eatanywhere.R;
+import com.example.eatanywhere.model.restaurants.Restaurant_;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,6 +25,10 @@ public class FavoritesFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    //private FavoritesAdapter;
+    private RecyclerView recyclerView;
+    private ArrayList<Restaurant_> favRestaurantsList;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -55,6 +63,7 @@ public class FavoritesFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
         getActivity().setTitle(R.string.app_name);
     }
 

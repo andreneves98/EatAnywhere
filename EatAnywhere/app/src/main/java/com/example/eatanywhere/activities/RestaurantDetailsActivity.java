@@ -18,8 +18,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -46,6 +48,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
     TextView location;
     TextView schedule;
     TextView phoneNumbers;
+    String latitude, longitude, address;
 
 
     @Override
@@ -74,6 +77,32 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
         generatePage(restaurant, reviews);
     }
 
+    public void onClickAddress(View v) {
+        String[] addressSplit = address.trim().split(",");
+        String newAddress = "";
+        for(int word = 0; word < addressSplit.length; word++) {
+            newAddress += addressSplit[word] + "+";
+        }
+
+        String query = "geo:" + latitude + "," + longitude + "?q=" + newAddress;
+        Uri gmmIntentUri = Uri.parse(query);
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        if (mapIntent.resolveActivity(getPackageManager()) != null) {
+            startActivity(mapIntent);
+        }
+    }
+
+    public void onClickDirections(View v) {
+        String query = "google.navigation:q=" + latitude + "," + longitude;
+        Uri gmmIntentUri = Uri.parse(query);
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        if (mapIntent.resolveActivity(getPackageManager()) != null) {
+            startActivity(mapIntent);
+        }
+    }
+
     private void generatePage(Restaurant_ restaurant, List<Review> reviewsList){
         Picasso.with(this).load(restaurant.getFeaturedImage()).into(thumb);
 
@@ -90,6 +119,9 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
         priceCategory.setText(price_category);
 
         location.setText(restaurant.getLocation().getAddress());
+        address = restaurant.getLocation().getAddress();
+        latitude = restaurant.getLocation().getLatitude();
+        longitude = restaurant.getLocation().getLongitude();
         //schedule.setText(restaurant.getTimings());
 
         String phone_numbers;

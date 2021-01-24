@@ -6,8 +6,16 @@ import androidx.fragment.app.Fragment;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.PopupWindow;
+import android.widget.Spinner;
 
 import com.example.eatanywhere.R;
 import com.example.eatanywhere.fragments.FavoritesFragment;
@@ -20,7 +28,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class MainActivity extends AppCompatActivity {
     FirebaseUser user;
     public static final int LOGIN_REQUEST = 1;
-
+    private String[] sortOptions = {"Most popular", "Cost", "Rating"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,10 +37,12 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         //getSupportActionBar().hide();   // hide app bar
 
         BottomNavigationView bottomNav = findViewById(R.id.bottomNavigationView);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
+
 
         // isto aqui dá erro porque o user ta a null, não usar
         //Toast.makeText(this, "You are loggedIn as\t" + user.getEmail(), Toast.LENGTH_SHORT).show();

@@ -4,7 +4,9 @@
     <string name="nav_favorites_title">Favorites</string>
     <string name="nav_profile_title">Profile</string>
     <string name="near_your_location">Near your location</string>
+    <string name="favorites_page_title">Favorite Restaurants</string>
     <string name="filter_button_text">Filter</string>
+    <string name="sort_button_text">Sort</string>
     <string name="map_button_text">Map</string>
 
     <string name="thumb">Thumb</string>
@@ -16,10 +18,12 @@
     <string name="informations">Informations</string>
     <string name="schedule">Schedule</string>
     <string name="phone_numbers">Phone Numbers</string>
+    <string name="directions">Directions</string>
     <string name="reviews">Reviews</string>
     <string name="review_date">Review Date</string>
     <string name="rating_text">Rating Text</string>
     <string name="review_text">Review Text</string>
     <string name="review_text_null">Review is empty.</string>
     <string name="visit">Visit</string>
+    <string name="spinner_description">Sort restaurants by:</string>
 </resources>

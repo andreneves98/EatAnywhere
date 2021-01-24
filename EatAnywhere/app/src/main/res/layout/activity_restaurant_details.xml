@@ -23,6 +23,28 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_launcher_background" />
 
+        <View
+            android:id="@+id/div1"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="40dp"
+            android:background="#e6e6e6"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/location"
+            app:layout_constraintVertical_bias="0.0"
+            tools:layout_editor_absoluteX="0dp" />
+
+        <View
+            android:id="@+id/div2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="40dp"
+            android:background="#e6e6e6"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/directions"
+            app:layout_constraintVertical_bias="0.0"
+            tools:layout_editor_absoluteX="0dp" />
+
         <TextView
             android:id="@+id/restaurant_name"
             android:layout_width="0dp"
@@ -51,6 +73,7 @@
             android:layout_marginTop="5dp"
             android:text="@string/price_category"
             android:textColor="@android:color/black"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -66,15 +89,16 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="5dp"
             android:drawablePadding="5dp"
+            android:onClick="onClickAddress"
+            android:clickable="true"
             android:text="@string/location"
             android:textColor="@android:color/black"
             app:drawableStartCompat="@drawable/ic_baseline_place_24"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/price_category"
-            app:layout_constraintVertical_bias="0.0" />
+            android:focusable="true" />
 
         <TextView
             android:id="@+id/reviews_count"
@@ -112,7 +136,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="15dp"
             android:drawablePadding="10dp"
             android:text="@string/informations"
             android:textColor="@android:color/black"
@@ -121,7 +145,7 @@
             app:drawableStartCompat="@drawable/ic_baseline_info_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/location"
+            app:layout_constraintTop_toBottomOf="@+id/div1"
             app:layout_constraintVertical_bias="0.0" />
 
         <TextView
@@ -129,7 +153,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="15dp"
             android:drawablePadding="10dp"
             android:text="@string/reviews"
             android:textColor="@android:color/black"
@@ -138,7 +162,7 @@
             app:drawableStartCompat="@drawable/ic_baseline_message_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/phone_numbers"
+            app:layout_constraintTop_toBottomOf="@+id/div2"
             app:layout_constraintVertical_bias="0.0" />
 
         <TextView
@@ -146,9 +170,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="10dp"
             android:drawablePadding="5dp"
             android:text="@string/phone_numbers"
+            android:autoLink="phone"
+            android:linksClickable="true"
             app:drawableStartCompat="@drawable/ic_baseline_phone_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -175,10 +201,30 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
             android:clickable="true"
+            android:focusable="true"
             app:layout_constraintBottom_toBottomOf="@+id/thumb"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/thumb"
             app:srcCompat="@drawable/ic_baseline_favorite_border_24" />
+
+        <TextView
+            android:id="@+id/directions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:text="@string/directions"
+            android:textColor="@android:color/black"
+            android:onClick="onClickDirections"
+            android:clickable="true"
+            android:drawablePadding="5dp"
+            app:drawableTint="@android:color/black"
+            app:drawableStartCompat="@drawable/ic_baseline_directions_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/phone_numbers"
+            android:focusable="true" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

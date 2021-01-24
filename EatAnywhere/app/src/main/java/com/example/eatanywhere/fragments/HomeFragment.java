@@ -13,10 +13,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.PopupWindow;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.eatanywhere.R;
 import com.example.eatanywhere.RecyclerViewClickInterface;
+import com.example.eatanywhere.activities.MainActivity;
 import com.example.eatanywhere.activities.RestaurantDetailsActivity;
 import com.example.eatanywhere.adapter.HomeAdapter;
 import com.example.eatanywhere.model.locations.ApiResponseLocation;
@@ -38,6 +44,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.content.Context.LAYOUT_INFLATER_SERVICE;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link HomeFragment#newInstance} factory method to
@@ -52,6 +60,8 @@ public class HomeFragment extends Fragment implements RecyclerViewClickInterface
 
     private HomeAdapter adapter;
     private RecyclerView recyclerView;
+    private Button sortButton;
+    private String[] sortOptions = {"Most Popular", "Cost", "Rating"};
 
     ProgressDialog progressDialog;
     private String apiKey = "37b8d502880d1f6d3bb55fc522c92f45";
@@ -93,7 +103,19 @@ public class HomeFragment extends Fragment implements RecyclerViewClickInterface
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
         getActivity().setTitle(R.string.app_name);
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        final View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        sortButton = getActivity().findViewById(R.id.sort_button);
+
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage("Loading....");
         progressDialog.show();
@@ -137,8 +159,8 @@ public class HomeFragment extends Fragment implements RecyclerViewClickInterface
                                             Restaurant_ rest = restaurants.get(i).getRestaurant();
                                             //Log.d("DEBUG", "Item: [" + restaurants.get(i).getRestaurant().getId() + ", " + restaurants.get(i).getRestaurant().getName() + ", " + restaurants.get(i).getRestaurant().getLocation().getLocalityVerbose() + "]");
                                             restaurantsList.add(new Restaurant_(rest.getId(),rest.getName(),rest.getLocation(), rest.getCuisines(), rest.getTimings(), rest.getAvgCostTwo(),
-                                                                                rest.getPriceRange(), rest.getFeaturedImage(), rest.getUserRating(), rest.getPhoneNumbers(),
-                                                                                rest.getEstablishment(), rest.getAll_reviews_count()));
+                                                    rest.getPriceRange(), rest.getFeaturedImage(), rest.getUserRating(), rest.getPhoneNumbers(),
+                                                    rest.getEstablishment(), rest.getAll_reviews_count()));
                                             //mAdapter.notifyItemInserted(i);
                                         }
                                         generateDataList(restaurantsList);
@@ -166,13 +188,45 @@ public class HomeFragment extends Fragment implements RecyclerViewClickInterface
                         Toast.makeText(getActivity(), "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
                     }
                 });
-    }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+
+
+        final Button sortButton = view.findViewById(R.id.sort_button);
+        sortButton.setOnClickListener(new Button.OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+                LayoutInflater layoutInflater = (LayoutInflater) getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+                View popupView = layoutInflater.inflate(R.layout.sort_popout, null);
+                final PopupWindow popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                popupWindow.setOutsideTouchable(true);
+                //Button btnDismiss = (Button)popupView.findViewById(R.id.dismiss);
+
+                Spinner popupSpinner = (Spinner)popupView.findViewById(R.id.popupspinner);
+
+                ArrayAdapter<String> adapter =
+                        new ArrayAdapter<String>(getContext(),
+                                android.R.layout.simple_spinner_item, sortOptions);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                popupSpinner.setAdapter(adapter);
+
+
+
+                /*view.setOnClickListener(new Button.OnClickListener(){
+
+                    @Override
+                    public void onClick(View v) {
+                        if(popupWindow.isShowing())
+                            popupWindow.dismiss();
+                    }});*/
+
+                popupWindow.showAsDropDown(sortButton, 20, 0);
+
+            }
+
+        });
+
+        return view;
     }
 
     /*Method to generate List of data using RecyclerView with custom adapter*/
@@ -219,4 +273,5 @@ public class HomeFragment extends Fragment implements RecyclerViewClickInterface
 
 
     }
+
 }

@@ -11,18 +11,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.MainActivity" android:launchMode="singleTop"
-            android:label="@string/app_name">
+        <activity
+            android:name=".activities.MainActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".activities.LoginActivity" />
-
-        <activity android:name=".activities.RestaurantDetailsActivity"
+        <activity
+            android:name=".activities.RestaurantDetailsActivity"
             android:label="@string/app_name"
             android:parentActivityName=".activities.MainActivity">
             <meta-data
