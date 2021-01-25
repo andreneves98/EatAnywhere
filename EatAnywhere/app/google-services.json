@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "412484657291",
+    "firebase_url": "https://eatanywhereapp-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "eatanywhereapp",
     "storage_bucket": "eatanywhereapp.appspot.com"
   },

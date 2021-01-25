@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Intent loginIntent = new Intent(this, LoginActivity.class);
-        //startActivityForResult(loginIntent, LOGIN_REQUEST);
+        startActivityForResult(loginIntent, LOGIN_REQUEST);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);

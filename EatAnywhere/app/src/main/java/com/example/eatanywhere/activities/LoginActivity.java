@@ -36,7 +36,6 @@ public class LoginActivity extends AppCompatActivity {
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
         firebaseAuth = FirebaseAuth.getInstance();
-
         progressBar=findViewById(R.id.progressBar);
         this.getSupportActionBar().hide();
 
@@ -45,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String memail = email.getText().toString().trim();
                 String mpassword = password.getText().toString().trim();
+                System.out.println("FIREBASEAUTH==="+firebaseAuth.getApp().toString());
 
                 if(TextUtils.isEmpty(memail)) {
                     email.setError("Email is required");
