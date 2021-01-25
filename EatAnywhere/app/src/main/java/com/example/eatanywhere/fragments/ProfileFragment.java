@@ -184,9 +184,10 @@ public class ProfileFragment extends Fragment {
             public void onClick(View v) {
                 Toast.makeText(getActivity(),"User " +user.getEmail() + " logged Out", Toast.LENGTH_SHORT).show();
                 FirebaseAuth.getInstance().signOut();
-             //   getActivity().getFragmentManager().popBackStack();
+
                 Intent intent = new Intent(getActivity(), LoginActivity.class);
-                startActivityForResult(intent, LOGIN_REQUEST);
+                startActivity(intent);
+                getActivity().finish();
             }
         });
     }
@@ -225,6 +226,7 @@ public class ProfileFragment extends Fragment {
     }
 
     void saveProfileInfo(){
+
         Map<String, Object> userInfo = new HashMap<>();
         userInfo.put("name", name.getText().toString().trim());
         userInfo.put("lastName", lastName.getText().toString().trim());
@@ -235,7 +237,7 @@ public class ProfileFragment extends Fragment {
         storeInfoInDatabase(userInfo);
 
     }
-   void storeInfoInDatabase( Map userInfo ){
+    void storeInfoInDatabase( Map userInfo ){
 
        // Add a new document with a generated ID
        db.collection(user.getUid()).document("profileInfo")
@@ -253,34 +255,6 @@ public class ProfileFragment extends Fragment {
                        }
                    });
 
-     /*  FirebaseDatabase.getInstance().goOnline();
-       DatabaseReference database = FirebaseDatabase.getInstance().getReference("Users");
-
-       System.out.println(database.getDatabase().getApp().toString());
-       System.out.println(user.getUid());
-
-       System.out.println(user.getEmail());
-
-      // Tasl DatabaseReference i=database.child("daskdasldma");
-       //i2.setValue("OLAAAAA");
-       System.out.println(database.getDatabase().getApp().toString());
-       database.child("ProfileInfo").child(user.getUid())
-               .setPriority(json.toString(), new DatabaseReference.CompletionListener() {
-                   @Override
-                   public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                       System.out.println("ERROR="+ error.getMessage());
-                       if (error != null) {
-                           Toast.makeText(getActivity().getApplicationContext(), "Some error occured, try again" + error, Toast.LENGTH_SHORT).show();
-                       } else {
-                           Toast.makeText(getActivity().getApplicationContext(), "added to database successfully", Toast.LENGTH_SHORT).show();
-                       }
-                   }
-               });
-      // database.child()
-       //database.push();
-     //  System.out.println("myRef="+.getKey());
-
-      */
        System.out.println(userInfo.toString());
     }
 }

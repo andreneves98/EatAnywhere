@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.example.eatanywhere.R;
 import com.example.eatanywhere.RecyclerViewClickInterface;
 import com.example.eatanywhere.activities.MainActivity;
+import com.example.eatanywhere.activities.MapsActivity;
 import com.example.eatanywhere.activities.RestaurantDetailsActivity;
 import com.example.eatanywhere.adapter.HomeAdapter;
 import com.example.eatanywhere.model.locations.ApiResponseLocation;
@@ -60,7 +61,7 @@ public class HomeFragment extends Fragment implements RecyclerViewClickInterface
 
     private HomeAdapter adapter;
     private RecyclerView recyclerView;
-    private Button sortButton;
+    private Button sortButton,mapButton;
     private String[] sortOptions = {"Most Popular", "Cost", "Rating"};
 
     ProgressDialog progressDialog;
@@ -114,7 +115,8 @@ public class HomeFragment extends Fragment implements RecyclerViewClickInterface
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        sortButton = getActivity().findViewById(R.id.sort_button);
+        mapButton = view.findViewById(R.id.map_button);
+
 
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage("Loading....");
@@ -224,6 +226,13 @@ public class HomeFragment extends Fragment implements RecyclerViewClickInterface
 
             }
 
+        });
+        mapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mapsActivity= new Intent(getActivity(),MapsActivity.class);
+                startActivity(mapsActivity);
+            }
         });
 
         return view;
