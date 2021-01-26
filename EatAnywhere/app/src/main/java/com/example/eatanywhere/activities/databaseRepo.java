@@ -7,6 +7,8 @@ import androidx.annotation.NonNull;
 import com.example.eatanywhere.model.restaurants.Location;
 import com.example.eatanywhere.model.restaurants.Restaurant_;
 import com.example.eatanywhere.model.restaurants.UserRating;
+import com.example.eatanywhere.model.reviews.Review;
+import com.example.eatanywhere.model.reviews.Reviews;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -22,6 +24,7 @@ import java.util.Map;
 
 public class databaseRepo {
 
+    private  static List<Review> reviewsList=new LinkedList<>();
 
     public static void saveRestaurant(Map<String, Map<String, Object>> restaurant, FirebaseUser user){
         // Add a new document with a generated ID
@@ -106,8 +109,9 @@ public class databaseRepo {
                                      String featuredImage=restaurantMap.get("featuredImage").toString();
                                      String phoneNumbers=restaurantMap.get("phoneNumbers").toString();
                                      int all_reviews_count=Integer.parseInt(restaurantMap.get("all_reviews_count").toString());
+                                     //Map<String,Object> reviewsMap= (Map<String,Object>)restaurantMap.get("ReviewList");
 
-
+                                     reviewsList= (List<Review>)restaurantMap.get("ReviewList");
                                      Restaurant_ restaurant=new Restaurant_(id,name,location,cuisines,Timings,avCostTwo,priceRange,
                                            featuredImage,userRating,phoneNumbers,establishment,all_reviews_count);
                                      restaurants.add(restaurant);
@@ -128,4 +132,13 @@ public class databaseRepo {
 
         return restaurants;
     }
+
+
+    public List<Review> getReviewList(){
+        return reviewsList;
+    }
+
+
+
+
 }

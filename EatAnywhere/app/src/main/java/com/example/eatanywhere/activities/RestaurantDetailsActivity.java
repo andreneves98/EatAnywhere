@@ -1,31 +1,24 @@
 package com.example.eatanywhere.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.loader.content.AsyncTaskLoader;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eatanywhere.R;
-import com.example.eatanywhere.adapter.HomeAdapter;
 import com.example.eatanywhere.adapter.ReviewsAdapter;
-import com.example.eatanywhere.model.restaurants.Restaurant;
 import com.example.eatanywhere.model.restaurants.Restaurant_;
 import com.example.eatanywhere.model.reviews.Review;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.auth.User;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -34,7 +27,6 @@ import android.widget.Toast;
 import java.lang.reflect.Type;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -65,7 +57,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant_details);
 
-        thumb = findViewById(R.id.thumb);
+        thumb = findViewById(R.id.thumbFav);
         restaurantName = findViewById(R.id.restaurant_name);
         rating = findViewById(R.id.rating);
         reviewsCount = findViewById(R.id.reviews_count);
@@ -112,6 +104,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
         newRest.put("establishment",restaurant.getEstablishment());
         newRest.put("featuredImage",restaurant.getFeaturedImage());
         newRest.put("all_reviews_count",restaurant.getAll_reviews_count());
+        newRest.put("ReviewList",reviews);
 
         restaurantInfo.put(restaurant.getName(),newRest);
         databaseRepo.saveRestaurant(restaurantInfo,user);

@@ -44,11 +44,11 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.CustomViewHold
             super(itemView);
             mView = itemView;
 
-            thumb = mView.findViewById(R.id.thumb);
-            restaurantTitle = mView.findViewById(R.id.Restaurant_title);
-            price_category = mView.findViewById(R.id.PriceCategory);
-            rating = mView.findViewById(R.id.Rating);
-            location = mView.findViewById(R.id.restaurant_location);
+            thumb = mView.findViewById(R.id.thumbFav);
+            restaurantTitle = mView.findViewById(R.id.Restaurant_TitleFav);
+            price_category = mView.findViewById(R.id.PriceCategoryFav);
+            rating = mView.findViewById(R.id.RatingFav);
+            location = mView.findViewById(R.id.restaurant_locationFav);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

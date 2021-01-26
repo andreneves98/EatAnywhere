@@ -19,7 +19,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 
-public class FavoriteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.CustomViewHolder> {
 
 
     private List<Restaurant_> restaurantsList;
@@ -46,11 +46,11 @@ public class FavoriteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             super(itemView);
             mView = itemView;
 
-            thumb = mView.findViewById(R.id.thumb);
-            restaurantTitle = mView.findViewById(R.id.Restaurant_title);
-            price_category = mView.findViewById(R.id.PriceCategory);
-            rating = mView.findViewById(R.id.Rating);
-            location = mView.findViewById(R.id.restaurant_location);
+            thumb = mView.findViewById(R.id.thumbFav);
+            restaurantTitle = mView.findViewById(R.id.Restaurant_TitleFav);
+            price_category = mView.findViewById(R.id.PriceCategoryFav);
+            rating = mView.findViewById(R.id.RatingFav);
+            location = mView.findViewById(R.id.restaurant_locationFav);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -63,14 +63,15 @@ public class FavoriteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 
     @Override
-    public FavoriteAdapter.CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View view = layoutInflater.inflate(R.layout.restaurant_card, parent, false);
+        View view = layoutInflater.inflate(R.layout.favorite_card, parent, false);
         return new FavoriteAdapter.CustomViewHolder(view);
     }
 
+
     @Override
-    public void onBindViewHolder(FavoriteAdapter.CustomViewHolder holder, int position) {
+    public void onBindViewHolder(CustomViewHolder holder, int position) {
         holder.restaurantTitle.setText(restaurantsList.get(position).getName());
         holder.restaurantTitle.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_baseline_restaurant_24, 0, 0, 0);
 
@@ -108,6 +109,8 @@ public class FavoriteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     }
 
+
+
     @Override
     public int getItemCount() {
         return restaurantsList.size();
@@ -116,4 +119,4 @@ public class FavoriteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 
 
-}
+

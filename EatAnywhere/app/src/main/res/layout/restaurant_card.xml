@@ -15,7 +15,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/thumb"
+            android:id="@+id/thumbFav"
             android:layout_width="119dp"
             android:layout_height="110dp"
             android:contentDescription="@string/thumb"
@@ -25,7 +25,7 @@
             card_view:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/PriceCategory"
+            android:id="@+id/PriceCategoryFav"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -35,11 +35,11 @@
             android:textColor="@android:color/black"
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintHorizontal_bias="0.0"
-            card_view:layout_constraintStart_toEndOf="@+id/thumb"
-            card_view:layout_constraintTop_toBottomOf="@+id/Restaurant_title" />
+            card_view:layout_constraintStart_toEndOf="@+id/thumbFav"
+            card_view:layout_constraintTop_toBottomOf="@+id/Restaurant_TitleFav" />
 
         <TextView
-            android:id="@+id/Rating"
+            android:id="@+id/RatingFav"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -49,11 +49,11 @@
             android:text="@string/Rating"
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintHorizontal_bias="0.0"
-            card_view:layout_constraintStart_toEndOf="@+id/thumb"
-            card_view:layout_constraintTop_toBottomOf="@+id/PriceCategory" />
+            card_view:layout_constraintStart_toEndOf="@+id/thumbFav"
+            card_view:layout_constraintTop_toBottomOf="@+id/PriceCategoryFav" />
 
         <TextView
-            android:id="@+id/Restaurant_title"
+            android:id="@+id/Restaurant_TitleFav"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
@@ -66,11 +66,11 @@
             android:textStyle="bold"
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintHorizontal_bias="0.0"
-            card_view:layout_constraintStart_toEndOf="@+id/thumb"
+            card_view:layout_constraintStart_toEndOf="@+id/thumbFav"
             card_view:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/restaurant_location"
+            android:id="@+id/restaurant_locationFav"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
@@ -83,8 +83,8 @@
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintHorizontal_bias="0.0"
-            card_view:layout_constraintStart_toEndOf="@+id/thumb"
-            card_view:layout_constraintTop_toBottomOf="@+id/Rating"
+            card_view:layout_constraintStart_toEndOf="@+id/thumbFav"
+            card_view:layout_constraintTop_toBottomOf="@+id/RatingFav"
             card_view:layout_constraintVertical_bias="0.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
