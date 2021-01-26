@@ -27,4 +27,9 @@
     <string name="visit">Visit</string>
     <string name="spinner_description">Sort restaurants by:</string>
     <string name="title_activity_maps">Map</string>
+
+    <string name="user_full_name">Full Name</string>
+    <string name="user_email">Email</string>
+    <string name="edit_profile_button">Edit Profile</string>
+    <string name="logout_button">Logout</string>
 </resources>

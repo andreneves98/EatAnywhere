@@ -50,6 +50,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.CustomVi
             super(itemView);
             mView = itemView;
             profilePic = mView.findViewById(R.id.profilePic);
+            profilePic.setClipToOutline(true);
             userRating = mView.findViewById(R.id.user_rating);
             reviewDate = mView.findViewById(R.id.review_date);
             ratingText = mView.findViewById(R.id.rating_text);

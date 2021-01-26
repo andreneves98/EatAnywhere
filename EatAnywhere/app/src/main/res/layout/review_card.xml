@@ -15,15 +15,16 @@
         <ImageView
             android:id="@+id/profilePic"
             android:layout_width="55dp"
-            android:layout_height="53dp"
+            android:layout_height="55dp"
             android:contentDescription="@string/thumb"
             android:scaleType="centerCrop"
+            android:background="@drawable/round_outline"
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintEnd_toEndOf="parent"
-            card_view:layout_constraintHorizontal_bias="0.04"
+            card_view:layout_constraintHorizontal_bias="0.042"
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toTopOf="parent"
-            card_view:layout_constraintVertical_bias="0.144" />
+            card_view:layout_constraintVertical_bias="0.177" />
 
         <TextView
             android:id="@+id/review_date"
@@ -103,6 +104,8 @@
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toBottomOf="@+id/review_text"
             card_view:layout_constraintVertical_bias="1.0" />
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
