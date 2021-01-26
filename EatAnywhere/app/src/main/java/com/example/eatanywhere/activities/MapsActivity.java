@@ -7,13 +7,19 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
+import android.location.Geocoder;
+import android.view.textclassifier.TextLinks;
 
+import java.util.concurrent.CountDownLatch;
 import com.example.eatanywhere.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -28,8 +34,22 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.JsonObject;
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -40,6 +60,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     Location mLastLocation;
     Marker mCurrLocationMarker;
     FusedLocationProviderClient mFusedLocationClient;
+    public LinkedList<MarkerOptions> restaurant_markers;
+
 
     private FusedLocationProviderClient fusedLocation;
 
@@ -50,18 +72,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-
+        restaurant_markers= new LinkedList<MarkerOptions>();
         mapFrag = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFrag.getMapAsync(this);
 
-        /*mLocationCallback = new LocationCallback() {
-            @Override
-            public void onLocationResult(LocationResult locationResult) {
-                super.onLocationResult(locationResult);
-                currentLocation = locationResult.getLastLocation();
 
-            }
-        };*/
     }
 
     /**
@@ -87,7 +102,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
         mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(120000); // two minute interval
         mLocationRequest.setFastestInterval(120000);
@@ -110,6 +124,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             mGoogleMap.setMyLocationEnabled(true);
         }
 
+
         // Add a marker in Sydney and move the camera
         //LatLng sydney = new LatLng(-34, 151);
         //mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
@@ -125,9 +140,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 Location location = locationList.get(locationList.size() - 1);
                 Log.i("MapsActivity", "Location: " + location.getLatitude() + " " + location.getLongitude());
                 mLastLocation = location;
+                try {
+                    restaurant_markers=getLocationResults();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
                 if (mCurrLocationMarker != null) {
                     mCurrLocationMarker.remove();
                 }
+
 
                 //Place current location marker
                 LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
@@ -136,12 +158,105 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 markerOptions.title("Current Position");
                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
                 mCurrLocationMarker = mGoogleMap.addMarker(markerOptions);
+                //updateMarkers();
+
+                LatLng latLng2=new LatLng(39.6290931,-8.670415399999998);
+                MarkerOptions markerOptions2 = new MarkerOptions();
+                markerOptions2.title("Restaurante Alfredo");
+                markerOptions2.position(latLng2);
+                mGoogleMap.addMarker(markerOptions2);
+
+
 
                 //move map camera
                 mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11));
             }
         }
     };
+
+    //search for parks based on current location
+    LinkedList<MarkerOptions>  getLocationResults() throws InterruptedException {
+
+       /* Uri gmmIntentUri = Uri.parse("geo:0,0?q=restaurants");
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        startActivity(mapIntent);*/
+        final LinkedList<MarkerOptions> tmp_rest=new LinkedList<MarkerOptions>();
+
+        OkHttpClient client = new OkHttpClient();
+        String baseUrl="https://maps.googleapis.com/maps/api/place/nearbysearch/json";
+        String type="restaurant";
+        String radius="radius=6000"; //radius of 10000m
+        String location=mLastLocation.getLatitude() +","+ mLastLocation.getLongitude();
+        //String request='$baseUrl?location=$location&$radius&type=$type&key=AIzaSyAQmfkIAie_uuVOs9WaqOrOUXVinaqoJkU';//google maps request
+
+        String requestUrl=baseUrl+"?location=" +location+"&"+radius+"&type="+ type+"&key=AIzaSyCqN4_T_xDjB_maCd-sbyNEO7WtijCP9Iw";//google maps request
+        System.out.println("Request="+requestUrl);
+
+
+
+        Request request = new Request.Builder()
+                .url(requestUrl)
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Response response) throws IOException {
+                if(response.isSuccessful()){
+                    JSONObject jsonResponse;
+                    try {
+                         jsonResponse = new JSONObject(response.body().string());
+                         JSONArray array=jsonResponse.getJSONArray("results");
+                         for(int i=0;i<array.length();i++){
+                             JSONObject result=(JSONObject)array.get(i);
+                             MarkerOptions marker= new MarkerOptions();
+                             JSONObject location =result.getJSONObject("geometry").getJSONObject("location");
+                             String business_Status= result.get("business_status").toString();
+                             String restaurant_name= result.get("name").toString();
+                             String restaurant_rating= result.get("rating").toString();
+
+
+                             Double latitude=Double.parseDouble(location.get("lat").toString());
+                             Double longitude=Double.parseDouble(location.get("lng").toString());
+                             LatLng position = new LatLng(latitude,longitude);
+                             System.out.println("POSITION="+position);
+                             System.out.println("Name="+restaurant_name);
+                             System.out.println("Rating="+restaurant_rating);
+                             System.out.println("Status="+business_Status);
+
+                             marker.position(position);
+                             marker.title("Name:"+restaurant_name + "  SRating:" + restaurant_rating + "  Status:" + business_Status);
+                             marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+
+                             tmp_rest.add(marker);
+                             System.out.println("Size==" + restaurant_markers.size());
+                         }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+               // updateMarkers();
+            }
+        });
+
+
+        return tmp_rest;
+    }
+    void updateMarkers(){
+        System.out.println("Size==" + restaurant_markers.size());
+
+        for(int i=0; i<restaurant_markers.size();i++){
+            MarkerOptions markerOptions = restaurant_markers.get(i);
+            mGoogleMap.addMarker(markerOptions);
+        }
+    }
+
+
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private void checkLocationPermission() {

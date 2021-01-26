@@ -8,8 +8,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.eatanywhere.R;
 import com.example.eatanywhere.adapter.HomeAdapter;
 import com.example.eatanywhere.adapter.ReviewsAdapter;
+import com.example.eatanywhere.model.restaurants.Restaurant;
 import com.example.eatanywhere.model.restaurants.Restaurant_;
 import com.example.eatanywhere.model.reviews.Review;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.auth.User;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
@@ -24,13 +29,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import java.io.IOException;
 import java.lang.reflect.Type;
-import java.net.URL;
-import java.util.ArrayList;
+
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class RestaurantDetailsActivity extends AppCompatActivity {
 
@@ -46,9 +53,11 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
     TextView reviewsCount;
     TextView priceCategory;
     TextView location;
+    FirebaseUser user;
     TextView schedule;
     TextView phoneNumbers;
     String latitude, longitude, address;
+    FloatingActionButton favButton;
 
 
     @Override
@@ -63,6 +72,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
         priceCategory = findViewById(R.id.price_category);
         location = findViewById(R.id.location);
         //schedule = findViewById(R.id.schedule);
+        user = FirebaseAuth.getInstance().getCurrentUser();
         phoneNumbers = findViewById(R.id.phone_numbers);
 
         intent = getIntent();
@@ -75,6 +85,37 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
         reviews = gson.fromJson(reviewListAsString, type);
 
         generatePage(restaurant, reviews);
+
+        favButton=findViewById(R.id.fav_button);
+
+
+
+    }
+
+    public void onClickFav(View v){
+
+        Toast.makeText(getBaseContext(),"Restaurant added to your favorites",Toast.LENGTH_SHORT).show();
+        System.out.println("  Restaurante==      "+restaurant.toString());
+
+        Map<String,Map<String,Object>> restaurantInfo = new HashMap<>();
+        Map<String,Object> newRest=new HashMap<>();
+
+        newRest.put("id",restaurant.getId());
+        newRest.put("Name",restaurant.getName());
+        newRest.put("location",restaurant.getLocation());
+        newRest.put("Cuisines",restaurant.getCuisines());
+        newRest.put("Timings",restaurant.getTimings());
+        newRest.put("avCostTwo",restaurant.getAvgCostTwo());
+        newRest.put("priceRange",restaurant.getPriceRange());
+        newRest.put("userRating",restaurant.getUserRating());
+        newRest.put("phoneNumbers",restaurant.getPhoneNumbers());
+        newRest.put("establishment",restaurant.getEstablishment());
+        newRest.put("featuredImage",restaurant.getFeaturedImage());
+        newRest.put("all_reviews_count",restaurant.getAll_reviews_count());
+
+        restaurantInfo.put(restaurant.getName(),newRest);
+        databaseRepo.saveRestaurant(restaurantInfo,user);
+        databaseRepo.getFavRestaurants(user);
     }
 
     public void onClickAddress(View v) {
