@@ -280,7 +280,6 @@ public class HomeFragment extends Fragment implements RecyclerViewClickInterface
                     }
                 });
 
-
     }
 
 }

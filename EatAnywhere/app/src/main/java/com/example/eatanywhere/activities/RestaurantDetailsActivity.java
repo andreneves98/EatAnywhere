@@ -80,8 +80,6 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
 
         favButton=findViewById(R.id.fav_button);
 
-
-
     }
 
     public void onClickFav(View v){

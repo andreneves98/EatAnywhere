@@ -4,7 +4,7 @@
     <string name="nav_favorites_title">Favorites</string>
     <string name="nav_profile_title">Profile</string>
     <string name="near_your_location">Near your location</string>
-    <string name="favorites_page_title">Favorite Restaurants</string>
+    <string name="favorites_page_title">Your Favorites</string>
     <string name="filter_button_text">Filter</string>
     <string name="sort_button_text">Sort</string>
     <string name="map_button_text">Map</string>

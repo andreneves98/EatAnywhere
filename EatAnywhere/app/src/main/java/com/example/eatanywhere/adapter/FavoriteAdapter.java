@@ -97,7 +97,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Custom
         holder.rating.setTextColor(Color.parseColor(ratingColor));
         holder.rating.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_baseline_star_20, 0);
 
-        holder.location.setText(restaurantsList.get(position).getLocation().getAddress());
+        holder.location.setText(restaurantsList.get(position).getLocation().getLocalityVerbose());
         holder.location.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_baseline_place_20, 0, 0, 0);
 
         Picasso.Builder builder = new Picasso.Builder(context);
