@@ -52,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 if(TextUtils.isEmpty(mpassword)) {
-                    email.setError("Password is required");
+                    password.setError("Password is required");
                     return;
                 }
 
