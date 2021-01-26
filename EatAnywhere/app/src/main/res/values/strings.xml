@@ -29,7 +29,15 @@
     <string name="title_activity_maps">Map</string>
 
     <string name="user_full_name">Full Name</string>
+    <string name="user_first_name">First Name</string>
+    <string name="user_last_name">Last Name</string>
+    <string name="user_phone_number">Phone Number</string>
+    <string name="user_address">Address</string>
+    <string name="user_nationality">Nationality</string>
     <string name="user_email">Email</string>
     <string name="edit_profile_button">Edit Profile</string>
     <string name="logout_button">Logout</string>
+    <string name="saveButton">Save</string>
+
+    <string name="edit_profile_activity_name">Edit Profile</string>
 </resources>

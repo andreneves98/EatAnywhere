@@ -1,5 +1,6 @@
 package com.example.eatanywhere.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.eatanywhere.R;
+import com.example.eatanywhere.activities.EditProfileActivity;
 import com.example.eatanywhere.activities.LoginActivity;
 import com.example.eatanywhere.activities.MainActivity;
 import com.example.eatanywhere.model.reviews.User;
@@ -45,11 +48,13 @@ import com.google.gson.JsonObject;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -69,16 +74,23 @@ public class ProfileFragment extends Fragment {
 
     //private EditText name,lastName,address,nationality,email;
     //private EditText phoneNumber;
+    private static final int EDIT_PROFILE_REQUEST = 2;
 
     private ImageView profilePic;
     private TextView fullName;
     private TextView email;
-    private Button saveButton;
+    private Button editProfileButton;
     private Button logOutButton;
+
+    private String emailString;
+    private String firstNameString;
+    private String lastNameString;
+    private String phoneNumberString;
+    private String addressString;
+    private String nationalityString;
 
     private FirebaseUser user;
     private FirebaseFirestore db;
-    public static final int LOGIN_REQUEST = 1;
     private boolean containsInfo;
     public ProfileFragment() {
         // Required empty public constructor
@@ -117,14 +129,10 @@ public class ProfileFragment extends Fragment {
     }
 
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =inflater.inflate(R.layout.fragment_profile,container,false);
-
-
         return inflater.inflate(R.layout.fragment_profile, container, false);
     }
 
@@ -138,68 +146,28 @@ public class ProfileFragment extends Fragment {
         fullName = view.findViewById(R.id.fullName);
         email = view.findViewById(R.id.email);
 
-        /*name=view.findViewById(R.id.ProfileName);
-        lastName=view.findViewById(R.id.LastName);
-        phoneNumber=view.findViewById(R.id.PhoneNumber);
-        nationality=view.findViewById(R.id.Nationality);
-        email=view.findViewById(R.id.email_profile);
-        address=view.findViewById(R.id.address);*/
 
-        logOutButton=view.findViewById(R.id.logOut);
-        //saveButton=view.findViewById(R.id.SaveChanges);
+        editProfileButton = view.findViewById(R.id.editProfileButton);
+        logOutButton = view.findViewById(R.id.logOut);
 
-        //email.setText(user.getEmail());
-        //email.setEnabled(false);
-
-        //email.setText(user.getEmail());
-
-
-
-        //containsInfo=checkUserContainsInfo();
-        /*saveButton.setOnClickListener(new View.OnClickListener() {
+        editProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean flag;
-                System.out.println("ContainsInfo=" + containsInfo);
-                if (!containsInfo) {
-                    if (TextUtils.isEmpty(name.getText().toString().trim())) {
-                        name.setError("Name is required");
-                        flag = false;
+                Intent intent = new Intent(getActivity(), EditProfileActivity.class);
+                //intent.putExtra("firebaseUser", user);
+                //intent.putExtra("firebaseDB", db);
 
-                    } else flag = true;
-                    if (TextUtils.isEmpty(lastName.getText().toString().trim())) {
-                        lastName.setError("Last Name is required");
-                        flag = false;
+                //containsInfo = checkUserContainsInfo();
 
-                    } else flag = true;
-                    if (TextUtils.isEmpty(phoneNumber.getText().toString())) {
-                        phoneNumber.setError("Phone Number is required");
-                        flag = false;
-
-                    } else flag = true;
-
-                    if (TextUtils.isEmpty(nationality.getText().toString().trim())) {
-                        nationality.setError("Nationality is required");
-                        flag = false;
-
-                    } else flag = true;
-
-                    if (TextUtils.isEmpty(address.getText().toString().trim())) {
-                        address.setError("Address is required");
-                        flag = false;
-
-                    } else flag = true;
-
-                    if (flag) saveProfileInfo();
-
-                    return;
-
-                }
-                else{
-                    saveProfileInfo();
-                }
+                /*intent.putExtra("email", emailString);
+                intent.putExtra("firstName", firstNameString);
+                intent.putExtra("lastName", lastNameString);
+                intent.putExtra("phoneNumber", phoneNumberString);
+                intent.putExtra("address", addressString);
+                intent.putExtra("nationality", nationalityString);*/
+                startActivity(intent);
             }
-        });*/
+        });
 
         logOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -215,6 +183,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void generateProfile() {
+        System.out.println("ID="+user.getUid());
         db.collection(user.getUid()).document("profileInfo")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -227,7 +196,7 @@ public class ProfileFragment extends Fragment {
                                 String fullNameString = document.getData().get("name").toString() + " " + document.getData().get("lastName").toString();
                                 fullName.setText(fullNameString);
 
-                                email.setText(document.getData().get("email").toString());
+                                email.setText(Objects.requireNonNull(Objects.requireNonNull(document.getData()).get("email")).toString());
                             }
                         } else {
                             Log.w("TAG", "Error getting documents.", task.getException());
@@ -236,69 +205,7 @@ public class ProfileFragment extends Fragment {
                 });
     }
 
-    /*private boolean checkUserContainsInfo(){
-        System.out.println("ID="+user.getUid());
-        final boolean[] flag = new boolean[1];
-       // System.out.println()
-        db.collection(user.getUid()).document("profileInfo")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document=task.getResult();
-                            if(document.exists()){
-                                Log.d("TAG", document.getId() + " => " + document.getData());
-                                email.setText(document.getData().get("email").toString());
-                                name.setText(document.getData().get("name").toString());
-                                lastName.setText(document.getData().get("lastName").toString());
-                                address.setText(document.getData().get("address").toString());
-                                nationality.setText(document.getData().get("nationality").toString());
-                                phoneNumber.setText(document.getData().get("phoneNumber").toString());
-                                }
-                            flag[0] =true;
 
-                        }else {
-                            Log.w("TAG", "Error getting documents.", task.getException());
-                            flag[0] =false;
-                        }
-                    }
-                });
 
-        return flag[0];
-    }*/
 
-    /*void saveProfileInfo(){
-
-        Map<String, Object> userInfo = new HashMap<>();
-        userInfo.put("name", name.getText().toString().trim());
-        userInfo.put("lastName", lastName.getText().toString().trim());
-        userInfo.put("email", user.getEmail());
-        userInfo.put("address", address.getText().toString().trim());
-        userInfo.put("nationality", nationality.getText().toString().trim());
-        userInfo.put("phoneNumber", phoneNumber.getText().toString().trim());
-        storeInfoInDatabase(userInfo);
-
-    }*/
-
-    void storeInfoInDatabase( Map userInfo ){
-
-       // Add a new document with a generated ID
-       db.collection(user.getUid()).document("profileInfo")
-               .set(userInfo)
-               .addOnSuccessListener(new OnSuccessListener<Void>() {
-                       @Override
-                       public void onSuccess(Void aVoid) {
-                           Log.d("TAG", "DocumentSnapshot successfully written!");
-                       }
-                   })
-                           .addOnFailureListener(new OnFailureListener() {
-                       @Override
-                       public void onFailure(@NonNull Exception e) {
-                           Log.w("TAG", "Error writing document", e);
-                       }
-                   });
-
-       System.out.println(userInfo.toString());
-    }
 }
