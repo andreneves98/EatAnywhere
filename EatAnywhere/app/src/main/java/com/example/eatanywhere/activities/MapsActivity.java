@@ -51,6 +51,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.internal.concurrent.Task;
+
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -141,7 +143,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 Log.i("MapsActivity", "Location: " + location.getLatitude() + " " + location.getLongitude());
                 mLastLocation = location;
                 try {
-                    restaurant_markers=getLocationResults();
+                    getLocationResults();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -175,7 +177,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     };
 
     //search for parks based on current location
-    LinkedList<MarkerOptions>  getLocationResults() throws InterruptedException {
+      public void getLocationResults() throws InterruptedException {
 
        /* Uri gmmIntentUri = Uri.parse("geo:0,0?q=restaurants");
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
@@ -193,11 +195,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         String requestUrl=baseUrl+"?location=" +location+"&"+radius+"&type="+ type+"&key=AIzaSyCqN4_T_xDjB_maCd-sbyNEO7WtijCP9Iw";//google maps request
         System.out.println("Request="+requestUrl);
 
-
-
+       // Callback c =new Task();
         Request request = new Request.Builder()
                 .url(requestUrl)
                 .build();
+
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
@@ -232,7 +234,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                              marker.title("Name:"+restaurant_name + "  SRating:" + restaurant_rating + "  Status:" + business_Status);
                              marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
 
-                             tmp_rest.add(marker);
+                             restaurant_markers.add(marker);
                              System.out.println("Size==" + restaurant_markers.size());
                          }
 
@@ -240,12 +242,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         e.printStackTrace();
                     }
                 }
-               // updateMarkers();
             }
         });
 
-
-        return tmp_rest;
     }
     void updateMarkers(){
         System.out.println("Size==" + restaurant_markers.size());

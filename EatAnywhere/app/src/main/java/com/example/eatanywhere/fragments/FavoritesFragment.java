@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.eatanywhere.RecyclerViewClickInterface;
@@ -23,6 +24,7 @@ import com.example.eatanywhere.activities.databaseRepo;
 import com.example.eatanywhere.adapter.FavoriteAdapter;
 import com.example.eatanywhere.model.restaurants.Restaurant_;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -45,6 +47,7 @@ public class FavoritesFragment extends Fragment implements RecyclerViewClickInte
     //private FavoritesAdapter;
     private RecyclerView recyclerView;
     private List<Restaurant_> favRestaurantsList;
+    private ProgressBar progressBar;
 
     private FavoriteAdapter favoriteAdapter;
 
@@ -84,17 +87,22 @@ public class FavoritesFragment extends Fragment implements RecyclerViewClickInte
 
         getActivity().setTitle(R.string.app_name);
 
-        FirebaseUser user= FirebaseAuth.getInstance().getCurrentUser();
-        favRestaurantsList= databaseRepo.getFavRestaurants(user);
-        generateDataList(favRestaurantsList);
+
+        //progressBar= FavoritesFragment.getafindViewById(R.id.progressBar);
+        //progressBar.setVisibility(View.VISIBLE);
+
+
     }
 
     private void generateDataList(List<Restaurant_> restaurantList) {
-        recyclerView = getActivity().findViewById(R.id.favoriteRecyclerView);
+
+        recyclerView =this.getActivity().findViewById(R.id.favoriteRecyclerView);
+        System.out.println("RECYCLER="+recyclerView.toString());
+
         favoriteAdapter = new FavoriteAdapter(getActivity(), restaurantList, this);
 
        // recyclerView.setLayoutManager(getActivity()));
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getActivity(),2);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(favoriteAdapter);
     }
@@ -103,7 +111,34 @@ public class FavoritesFragment extends Fragment implements RecyclerViewClickInte
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
+
         return inflater.inflate(R.layout.fragment_favorites, container, false);
+
+    }
+    @Override
+    public void onResume() {
+        progressBar=getActivity().findViewById(R.id.progressBar2);
+        progressBar.setVisibility(View.VISIBLE);
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        System.out.println("User is "+user.getUid());
+        databaseRepo.updatFavRestaurants(user).addOnSuccessListener(new OnSuccessListener() {
+            @Override
+            public void onSuccess(Object o) {
+                System.out.println("Task completed!!!");
+                favRestaurantsList = databaseRepo.getFavRestaurants();
+                System.out.println("Size is ="+favRestaurantsList.size());
+                generateDataList(favRestaurantsList);
+                progressBar.setVisibility(View.INVISIBLE);
+
+
+            }
+        });
+      //  System.out.println("FavRestaurantList="+favRestaurantsList);
+
+        super.onResume();
+
     }
 
     @Override

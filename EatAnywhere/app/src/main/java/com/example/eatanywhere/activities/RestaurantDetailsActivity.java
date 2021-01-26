@@ -108,7 +108,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
 
         restaurantInfo.put(restaurant.getName(),newRest);
         databaseRepo.saveRestaurant(restaurantInfo,user);
-        databaseRepo.getFavRestaurants(user);
+        //databaseRepo.getFavRestaurants(user);
     }
 
     public void onClickAddress(View v) {
