@@ -51,7 +51,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import okhttp3.internal.concurrent.Task;
 
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -233,7 +232,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                              System.out.println("Status="+business_Status);
 
                              marker.position(position);
-                             marker.title("Name:"+restaurant_name);
+                             marker.title(restaurant_name);
                              marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
 
                              restaurant_markers.add(marker);

@@ -13,6 +13,7 @@
     <string name="login_button_text">Login</string>
     <string name="email_hint">Email</string>
     <string name="password_hint">Password</string>
+    <string name="search_hint">Search locations</string>
 
     <string name="thumb">Thumb</string>
     <string name="restaurant_title">Title</string>

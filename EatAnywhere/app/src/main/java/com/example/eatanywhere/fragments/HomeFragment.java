@@ -73,6 +73,9 @@ public class HomeFragment extends Fragment implements RecyclerViewClickInterface
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private String searchQuery;
+    private String defaultQuery;
+    private String query;
     private ZomatoApi service;
 
     public HomeFragment() {
@@ -103,6 +106,8 @@ public class HomeFragment extends Fragment implements RecyclerViewClickInterface
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+            searchQuery = getArguments().getString("searchQuery");
+            defaultQuery = getArguments().getString("defaultQuery");
         }
 
         getActivity().setTitle(R.string.app_name);
@@ -116,8 +121,6 @@ public class HomeFragment extends Fragment implements RecyclerViewClickInterface
         final View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         mapButton = view.findViewById(R.id.map_button);
-
-
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage("Loading....");
         progressDialog.show();
@@ -126,12 +129,23 @@ public class HomeFragment extends Fragment implements RecyclerViewClickInterface
         service = RetrofitClientInstance.getRetrofitInstance().create(ZomatoApi.class);
         restaurantsList = new ArrayList<>();
 
+
+        /*if(searchQuery.equals(null))
+            query = defaultQuery;
+        else
+            query = searchQuery;*/
+
+
+        Log.d("DEBUG", "SEARCH QUERY: " + searchQuery);
+
+        Log.d("DEBUG", "DEFAULT QUERY: " + defaultQuery);
+        Log.d("DEBUG", "QUERY: " + query);
         service.getLocation("Porto", apiKey)
                 .enqueue(new Callback<ApiResponseLocation>() {
                     @Override
                     public void onResponse(Call<ApiResponseLocation> call, Response<ApiResponseLocation> response) {
                         List<LocationSuggestion> locationSuggestion = response.body().getLocationSuggestions();
-                        Log.d("DEBUG", "/locations?query=Porto");
+                        Log.d("DEBUG", "/locations?query="+query);
                         Log.d("DEBUG", response.body().getStatus());
 
                         for(int i = 0; i < locationSuggestion.size(); i++) {
@@ -193,7 +207,7 @@ public class HomeFragment extends Fragment implements RecyclerViewClickInterface
 
 
 
-        final Button sortButton = view.findViewById(R.id.sort_button);
+        /*final Button sortButton = view.findViewById(R.id.sort_button);
         sortButton.setOnClickListener(new Button.OnClickListener() {
 
             @Override
@@ -214,19 +228,20 @@ public class HomeFragment extends Fragment implements RecyclerViewClickInterface
 
 
 
-                /*view.setOnClickListener(new Button.OnClickListener(){
+                view.setOnClickListener(new Button.OnClickListener(){
 
                     @Override
                     public void onClick(View v) {
                         if(popupWindow.isShowing())
                             popupWindow.dismiss();
-                    }});*/
+                    }});
 
-                popupWindow.showAsDropDown(sortButton, 20, 0);
+                //popupWindow.showAsDropDown(sortButton, 20, 0);
 
             }
 
-        });
+        });*/
+
         mapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

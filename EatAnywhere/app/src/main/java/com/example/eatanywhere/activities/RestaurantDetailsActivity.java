@@ -1,6 +1,8 @@
 package com.example.eatanywhere.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,6 +23,7 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -132,13 +135,14 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
             favButton.setBackgroundColor((getResources().getColor( android.R.color.white)));
             favButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor( android.R.color.white)));
             favButton.setColorFilter((getResources().getColor( android.R.color.black)));
-           // favButton.getI
+
             Toast.makeText(getBaseContext(),"Restaurant removed from your favorites",Toast.LENGTH_SHORT).show();
             fav_checked=false;
             databaseRepo.Remove(user,restaurant);
 
         }
     }
+
     public void onClickAddress(View v) {
         String[] addressSplit = address.trim().split(",");
         String newAddress = "";
