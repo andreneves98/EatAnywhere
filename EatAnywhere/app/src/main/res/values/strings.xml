@@ -8,6 +8,11 @@
     <string name="filter_button_text">Filter</string>
     <string name="sort_button_text">Sort</string>
     <string name="map_button_text">Map</string>
+    <string name="login_text">EatAnywhere</string>
+    <string name="login_subtext">Log In to continue</string>
+    <string name="login_button_text">Login</string>
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Password</string>
 
     <string name="thumb">Thumb</string>
     <string name="restaurant_title">Title</string>

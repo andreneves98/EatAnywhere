@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -22,7 +23,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
     EditText email, password;
-    Button logInButton;
+    Button loginButton;
     ProgressBar progressBar;
     FirebaseAuth firebaseAuth;
     FirebaseUser user;
@@ -32,14 +33,14 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
 
-        logInButton = findViewById(R.id.LogIn);
-        email = findViewById(R.id.email);
-        password = findViewById(R.id.password);
+        loginButton = findViewById(R.id.loginButton);
+        email = findViewById(R.id.email_input);
+        password = findViewById(R.id.password_input);
         firebaseAuth = FirebaseAuth.getInstance();
-        progressBar=findViewById(R.id.progressBar);
+        //progressBar=findViewById(R.id.progressBar);
         this.getSupportActionBar().hide();
 
-        logInButton.setOnClickListener(new View.OnClickListener() {
+        loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String memail = email.getText().toString().trim();
@@ -56,12 +57,12 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
 
-                progressBar.setVisibility(View.VISIBLE);
+                //progressBar.setVisibility(View.VISIBLE);
                 firebaseAuth.signInWithEmailAndPassword(memail, mpassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()) {
-                            progressBar.setVisibility(View.INVISIBLE);
+                            //progressBar.setVisibility(View.INVISIBLE);
                             user = task.getResult().getUser();
 
                             Intent returnIntent = new Intent();
@@ -70,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
                             finish();                                       // close this activity and resume main
 
                         } else {
-                            progressBar.setVisibility(View.INVISIBLE);
+                            //progressBar.setVisibility(View.INVISIBLE);
                             Toast.makeText(LoginActivity.this,"Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -78,6 +79,8 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
+
    /* void signOut() async{
         try {
             user= (await FirebaseAuth.instance.currentUser);

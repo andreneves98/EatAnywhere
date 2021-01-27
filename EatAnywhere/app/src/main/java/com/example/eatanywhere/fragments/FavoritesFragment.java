@@ -118,7 +118,7 @@ public class FavoritesFragment extends Fragment implements RecyclerViewClickInte
             @Override
             public boolean checkLayoutParams(RecyclerView.LayoutParams lp) {
                 // force size of viewHolder here, this will override layout_height and layout_width from xml
-                lp.height = getHeight() / getSpanCount();
+                //lp.height = getHeight() / getSpanCount();
                 lp.width = getWidth() / getSpanCount();
                 return true;
             }
