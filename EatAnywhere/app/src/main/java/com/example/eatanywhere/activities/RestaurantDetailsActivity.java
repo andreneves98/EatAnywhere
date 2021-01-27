@@ -6,8 +6,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eatanywhere.R;
 import com.example.eatanywhere.adapter.ReviewsAdapter;
+import com.example.eatanywhere.model.restaurants.Restaurant;
 import com.example.eatanywhere.model.restaurants.Restaurant_;
 import com.example.eatanywhere.model.reviews.Review;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -16,11 +18,14 @@ import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,6 +55,9 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
     TextView phoneNumbers;
     String latitude, longitude, address;
     FloatingActionButton favButton;
+    ProgressBar progressBar;
+    private List<Restaurant_> favRestaurantsList;
+    boolean fav_checked;
 
 
     @Override
@@ -79,36 +87,58 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
         generatePage(restaurant, reviews);
 
         favButton=findViewById(R.id.fav_button);
+        progressBar=findViewById(R.id.progressBar3);
+        progressBar.setVisibility(View.VISIBLE);
+
+
+
+
 
     }
 
     public void onClickFav(View v){
 
-        Toast.makeText(getBaseContext(),"Restaurant added to your favorites",Toast.LENGTH_SHORT).show();
         System.out.println("  Restaurante==      "+restaurant.toString());
 
-        Map<String,Map<String,Object>> restaurantInfo = new HashMap<>();
-        Map<String,Object> newRest=new HashMap<>();
+        if(!fav_checked){
+            favButton.setBackgroundColor((getResources().getColor( android.R.color.holo_red_light)));
+            //favButton.setBackgroundTintMode(PorterDuff.Mode.values());
+            favButton.setColorFilter((getResources().getColor( android.R.color.holo_red_light)));
+            favButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor( android.R.color.holo_red_light)));
 
-        newRest.put("id",restaurant.getId());
-        newRest.put("Name",restaurant.getName());
-        newRest.put("location",restaurant.getLocation());
-        newRest.put("Cuisines",restaurant.getCuisines());
-        newRest.put("Timings",restaurant.getTimings());
-        newRest.put("avCostTwo",restaurant.getAvgCostTwo());
-        newRest.put("priceRange",restaurant.getPriceRange());
-        newRest.put("userRating",restaurant.getUserRating());
-        newRest.put("phoneNumbers",restaurant.getPhoneNumbers());
-        newRest.put("establishment",restaurant.getEstablishment());
-        newRest.put("featuredImage",restaurant.getFeaturedImage());
-        newRest.put("all_reviews_count",restaurant.getAll_reviews_count());
-        newRest.put("ReviewList",reviews);
+            fav_checked=true;
+            Toast.makeText(getBaseContext(),"Restaurant added to your favorites",Toast.LENGTH_SHORT).show();
+            Map<String,Map<String,Object>> restaurantInfo = new HashMap<>();
+            Map<String,Object> newRest=new HashMap<>();
 
-        restaurantInfo.put(restaurant.getName(),newRest);
-        databaseRepo.saveRestaurant(restaurantInfo,user);
-        //databaseRepo.getFavRestaurants(user);
+            newRest.put("id",restaurant.getId());
+            newRest.put("Name",restaurant.getName());
+            newRest.put("location",restaurant.getLocation());
+            newRest.put("Cuisines",restaurant.getCuisines());
+            newRest.put("Timings",restaurant.getTimings());
+            newRest.put("avCostTwo",restaurant.getAvgCostTwo());
+            newRest.put("priceRange",restaurant.getPriceRange());
+            newRest.put("userRating",restaurant.getUserRating());
+            newRest.put("phoneNumbers",restaurant.getPhoneNumbers());
+            newRest.put("establishment",restaurant.getEstablishment());
+            newRest.put("featuredImage",restaurant.getFeaturedImage());
+            newRest.put("all_reviews_count",restaurant.getAll_reviews_count());
+            newRest.put("ReviewList",reviews);
+
+            restaurantInfo.put(restaurant.getName(),newRest);
+            databaseRepo.saveRestaurant(restaurantInfo,user);
+        }
+        else{//remove
+            favButton.setBackgroundColor((getResources().getColor( android.R.color.white)));
+            favButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor( android.R.color.white)));
+            favButton.setColorFilter((getResources().getColor( android.R.color.black)));
+           // favButton.getI
+            Toast.makeText(getBaseContext(),"Restaurant removed from your favorites",Toast.LENGTH_SHORT).show();
+            fav_checked=false;
+            databaseRepo.Remove(user,restaurant);
+
+        }
     }
-
     public void onClickAddress(View v) {
         String[] addressSplit = address.trim().split(",");
         String newAddress = "";
@@ -137,6 +167,37 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
 
     private void generatePage(Restaurant_ restaurant, List<Review> reviewsList){
         Picasso.with(this).load(restaurant.getFeaturedImage()).into(thumb);
+        //Check if restaurant is in FavList
+        final  Restaurant_ tmpRestaurant= restaurant;
+        fav_checked=false;
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        System.out.println("User is "+user.getUid());
+        databaseRepo.updatFavRestaurants(user).addOnSuccessListener(new OnSuccessListener() {
+            @Override
+            public void onSuccess(Object o) {
+                favRestaurantsList = databaseRepo.getFavRestaurants();
+                System.out.println("Task completed!!!");
+
+                if(databaseRepo.checkContainsFav(tmpRestaurant)){
+                    System.out.println(tmpRestaurant.toString());
+                    System.out.println("Enter here!!");
+                    favButton.setBackgroundColor((getResources().getColor( android.R.color.holo_red_light)));
+                    favButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor( android.R.color.holo_red_light)));
+                    favButton.setColorFilter((getResources().getColor( android.R.color.holo_red_light)));
+                    fav_checked=true;
+                }
+                else{
+                    System.out.println(tmpRestaurant.toString());
+                    System.out.println("Enter not contains!!!!");
+                    favButton.setBackgroundColor((getResources().getColor( android.R.color.white)));
+                    favButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor( android.R.color.white)));
+                    favButton.setColorFilter((getResources().getColor( android.R.color.black)));
+                    fav_checked=false;
+                }
+                progressBar.setVisibility(View.INVISIBLE);
+            }
+        });
+
 
         restaurantName.setText(restaurant.getName());
 

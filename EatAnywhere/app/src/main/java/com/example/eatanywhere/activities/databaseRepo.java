@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.example.eatanywhere.model.restaurants.Location;
+import com.example.eatanywhere.model.restaurants.Restaurant;
 import com.example.eatanywhere.model.restaurants.Restaurant_;
 import com.example.eatanywhere.model.restaurants.UserRating;
 import com.example.eatanywhere.model.reviews.Review;
@@ -14,10 +15,13 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -131,12 +135,34 @@ public class databaseRepo {
 
         return t;
     }
-    public static List<Restaurant_> getFavRestaurants() {
+    public static List<Restaurant_> getFavRestaurants() { return restaurants; }
 
-        return restaurants;
+    public static boolean checkContainsFav(Restaurant_ restaurant){
+
+        for (int i=0; i<restaurants.size();i++){
+            if(restaurant.getName().equals(restaurants.get(i).getName()))
+                return true;
+        }
+
+        return false;
     }
 
 
+
+    public static Task Remove(FirebaseUser user,Restaurant_ restaurant){
+        FirebaseFirestore db= FirebaseFirestore.getInstance();
+
+        DocumentReference docRef=db.collection(user.getUid()).document("Favorites");
+        Map<String,Object> removeRest=new HashMap<>();
+        removeRest.put(restaurant.getName(), FieldValue.delete());
+        Task t =docRef.update(removeRest).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+
+            }
+        });
+        return t;
+    }
     public List<Review> getReviewList(){
         return reviewsList;
     }

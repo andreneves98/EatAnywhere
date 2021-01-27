@@ -3,9 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
+    android:layout_marginTop="0dp"
+    android:backgroundTint="#D81C1C"
     android:fillViewport="true"
-    android:layout_marginTop="0dp">
+    android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -88,17 +89,17 @@
             android:layout_marginStart="15dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="5dp"
-            android:drawablePadding="5dp"
-            android:onClick="onClickAddress"
             android:clickable="true"
+            android:drawablePadding="5dp"
+            android:focusable="true"
+            android:onClick="onClickAddress"
             android:text="@string/location"
             android:textColor="@android:color/black"
             app:drawableStartCompat="@drawable/ic_baseline_place_24"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/price_category"
-            android:focusable="true" />
+            app:layout_constraintTop_toBottomOf="@+id/price_category" />
 
         <TextView
             android:id="@+id/reviews_count"
@@ -171,10 +172,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
-            android:drawablePadding="5dp"
-            android:text="@string/phone_numbers"
             android:autoLink="phone"
+            android:drawablePadding="5dp"
             android:linksClickable="true"
+            android:text="@string/phone_numbers"
             app:drawableStartCompat="@drawable/ic_baseline_phone_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -200,14 +201,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
+            android:backgroundTint="#FFFFFF"
             android:clickable="true"
             android:focusable="true"
+            android:onClick="onClickFav"
+            app:backgroundTint="#FFFFFF"
             app:layout_constraintBottom_toBottomOf="@+id/thumbFav"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/thumbFav"
             app:layout_constraintVertical_bias="0.0"
-            app:srcCompat="@drawable/ic_baseline_favorite_border_24"
-            android:onClick="onClickFav" />
+            app:srcCompat="@drawable/ic_baseline_favorite_border_24" />
 
         <TextView
             android:id="@+id/directions"
@@ -215,18 +218,29 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="5dp"
-            android:text="@string/directions"
-            android:textColor="@android:color/black"
-            android:onClick="onClickDirections"
             android:clickable="true"
             android:drawablePadding="5dp"
-            app:drawableTint="@android:color/black"
+            android:focusable="true"
+            android:onClick="onClickDirections"
+            android:text="@string/directions"
+            android:textColor="@android:color/black"
             app:drawableStartCompat="@drawable/ic_baseline_directions_24"
+            app:drawableTint="@android:color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/phone_numbers"
-            android:focusable="true" />
+            app:layout_constraintTop_toBottomOf="@+id/phone_numbers" />
+
+        <ProgressBar
+            android:id="@+id/progressBar3"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.564"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

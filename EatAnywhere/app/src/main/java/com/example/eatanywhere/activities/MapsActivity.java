@@ -137,6 +137,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         @Override
         public void onLocationResult(LocationResult locationResult) {
             List<Location> locationList = locationResult.getLocations();
+
             if (locationList.size() > 0) {
                 //The last location in the list is the newest
                 Location location = locationList.get(locationList.size() - 1);
@@ -147,6 +148,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+
 
                 if (mCurrLocationMarker != null) {
                     mCurrLocationMarker.remove();
@@ -160,15 +162,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 markerOptions.title("Current Position");
                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
                 mCurrLocationMarker = mGoogleMap.addMarker(markerOptions);
-                //updateMarkers();
 
-                LatLng latLng2=new LatLng(39.6290931,-8.670415399999998);
+             /*   LatLng latLng2=new LatLng(39.6290931,-8.670415399999998);
                 MarkerOptions markerOptions2 = new MarkerOptions();
                 markerOptions2.title("Restaurante Alfredo");
                 markerOptions2.position(latLng2);
-                mGoogleMap.addMarker(markerOptions2);
+                mGoogleMap.addMarker(markerOptions2);*/
 
 
+            //    updateMarkers();
 
                 //move map camera
                 mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11));
@@ -177,13 +179,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     };
 
     //search for parks based on current location
-      public void getLocationResults() throws InterruptedException {
+      public OkHttpClient getLocationResults() throws InterruptedException {
 
        /* Uri gmmIntentUri = Uri.parse("geo:0,0?q=restaurants");
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
         mapIntent.setPackage("com.google.android.apps.maps");
         startActivity(mapIntent);*/
-        final LinkedList<MarkerOptions> tmp_rest=new LinkedList<MarkerOptions>();
 
         OkHttpClient client = new OkHttpClient();
         String baseUrl="https://maps.googleapis.com/maps/api/place/nearbysearch/json";
@@ -195,7 +196,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         String requestUrl=baseUrl+"?location=" +location+"&"+radius+"&type="+ type+"&key=AIzaSyCqN4_T_xDjB_maCd-sbyNEO7WtijCP9Iw";//google maps request
         System.out.println("Request="+requestUrl);
 
-       // Callback c =new Task();
+        final CountDownLatch countDownLatch = new CountDownLatch(1);
         Request request = new Request.Builder()
                 .url(requestUrl)
                 .build();
@@ -204,6 +205,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onFailure(Request request, IOException e) {
                 e.printStackTrace();
+                countDownLatch.countDown();
             }
 
             @Override
@@ -231,23 +233,26 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                              System.out.println("Status="+business_Status);
 
                              marker.position(position);
-                             marker.title("Name:"+restaurant_name + "  SRating:" + restaurant_rating + "  Status:" + business_Status);
+                             marker.title("Name:"+restaurant_name);
                              marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
 
                              restaurant_markers.add(marker);
-                             System.out.println("Size==" + restaurant_markers.size());
+                             //System.out.println("Size==" + restaurant_markers.size());
                          }
 
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    countDownLatch.countDown();
                 }
             }
         });
-
+        countDownLatch.await();
+        updateMarkers();
+        return client;
     }
     void updateMarkers(){
-        System.out.println("Size==" + restaurant_markers.size());
+      //  System.out.println("Size==" + restaurant_markers.size());
 
         for(int i=0; i<restaurant_markers.size();i++){
             MarkerOptions markerOptions = restaurant_markers.get(i);
