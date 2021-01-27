@@ -188,7 +188,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         OkHttpClient client = new OkHttpClient();
         String baseUrl="https://maps.googleapis.com/maps/api/place/nearbysearch/json";
         String type="restaurant";
-        String radius="radius=6000"; //radius of 10000m
+        String radius="radius=6000"; //radius of 6000m
         String location=mLastLocation.getLatitude() +","+ mLastLocation.getLongitude();
         //String request='$baseUrl?location=$location&$radius&type=$type&key=AIzaSyAQmfkIAie_uuVOs9WaqOrOUXVinaqoJkU';//google maps request
 
